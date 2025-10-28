@@ -3,11 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Book;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BookType extends AbstractType
@@ -21,21 +21,19 @@ class BookType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('description', TextareaType::class, [
-                'trim' => true,
+                'required' => false,
+                'attr' => [
+                    'rows' => 8,
+                ],
+                'trim' => false,
             ])
             ->add('isbn')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Выберите категорию',
+            ])
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-
-            if (isset($data['description'])) {
-                $data['description'] = substr($data['description'], 0, 80);
-            }
-
-            // Update the event with the modified data
-            $event->setData($data);
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

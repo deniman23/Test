@@ -23,7 +23,7 @@ class Book
     #[Assert\NotBlank]
     private ?string $author = null;
 
-    #[ORM\Column(length: 80, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -34,6 +34,11 @@ class Book
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/^\d{13}$/', message: 'The ISBN must be a valid ISBN-13 numbers format.')]
     private ?string $isbn = null;
+
+    #[ORM\ManyToOne(inversedBy: 'books')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Выберите категорию.')]
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
@@ -96,6 +101,18 @@ class Book
     public function setIsbn(string $isbn): static
     {
         $this->isbn = $isbn;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

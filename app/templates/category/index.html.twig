@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Категории{% endblock %}
+
+{% block body %}
+    <h1>Категории</h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <a href="{{ path('category_new') }}" class="btn btn-primary">Добавить категорию</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Книг</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.books|length }}</td>
+                <td>
+                    <a href="{{ path('category_edit', {id: category.id}) }}">Редактировать</a>
+                    {% if category.books|length == 0 %}
+                        <form method="post"
+                              action="{{ path('category_delete', {id: category.id}) }}"
+                              style="display:inline"
+                              onsubmit="return confirm('Удалить категорию?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                            <button class="btn btn-link p-0">Удалить</button>
+                        </form>
+                    {% else %}
+                        <small class="text-muted">Удаление запрещено</small>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Категории не найдены.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

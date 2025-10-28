@@ -35,6 +35,10 @@
                 <td>{{ book.description }}</td>
             </tr>
             <tr>
+                <th>Category</th>
+                <td>{{ book.category ? book.category.name : '—' }}</td>
+            </tr>
+            <tr>
                 <th>Isbn</th>
                 <td>{{ book.isbn }}</td>
             </tr>

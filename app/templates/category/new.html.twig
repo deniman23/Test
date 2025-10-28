@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новая категория{% endblock %}
+
+{% block body %}
+    <h1>Новая категория</h1>
+
+    {{ include('category/_form.html.twig', {button_label: 'Создать'}) }}
+
+    <a href="{{ path('category_index') }}">Назад к списку</a>
+{% endblock %}
